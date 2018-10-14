@@ -4,6 +4,12 @@ var upload = multer({ dest: 'uploads/' })
 
 var app = express()
 
+app.use(express.static('static'))
+
+app.get('/', function(req, res){
+    res.sendFile(__dirname + "/static/dragdrop.html");
+})
+
 app.post('/profile', upload.single('avatar'), function (req, res, next) {
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
