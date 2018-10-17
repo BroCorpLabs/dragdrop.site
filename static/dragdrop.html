@@ -15,15 +15,18 @@
   <p style="color:black;font-style:light">
     <h4>Publish websites by dragging and dropping them into your browser.</h4><br>
   </p>
-  <!-- Change /upload-target to your upload address -->
-  <form action="/upload-file" id="dragdropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;">
-    <img src="img/dragdrop-header.gif" style="width:30vw;margin-left:-10px;">
-  </form>
+
+  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
+    <div class="fallback">
+      <input name="dropfile" type="file" multiple />
+    </div>
+   </form>
+
 
   <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   <script>
-  Dropzone.options.dragdropfile = {
-    paramName: "file", // The name that will be used to transfer the file
+  Dropzone.options.dropfile = {
+    paramName: "dropfile", // The name that will be used to transfer the file
     maxFilesize: 2, // MB
     accept: function(file, done) {
       if (file.name == "justinbieber.jpg") {
