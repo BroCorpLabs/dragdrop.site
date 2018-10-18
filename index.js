@@ -31,21 +31,29 @@ function makeid(len) {
   return text;
 }
 
-function newSite(){
+function newSite(filename){
   var siteID = makeid(5)
-  //create a new directory with siteID
-  //create a new nginx file
+  //create a new directory with siteID in /var/www/userSites/
+  //create a new nginx file in /etc/nginx/sites-available/
+  //create a symlink in /etc/nginx/sites-enabled
+  moveToUserDir(filename, siteID);
   return siteID;
+}
+
+function moveToUserDir(filename, siteID){
+  //move file from uploads dir to user dir
+    //if file exists, rename existing and add new
 }
 
 app.post( '/upload', upload.single('dropfile'), function( req, res, next ) {
   // Metadata about the uploaded file can now be found in req.file
-  console.log(req.cookies.siteID);
+  console.log(req.cookies.siteID + " uploaded "+ req.file.originalname);
   if(req.cookies.siteID == undefined){
     console.log("creating new site")
-    return res.status( 201 ).cookie('siteID', newSite()).send('successfully created new site');
+    return res.status( 201 ).cookie('siteID', newSite(req.file.originalname)).send('successfully created new site');
   } else {
     return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
+    moveToUserDir(req.file.originalname, req.cookies.siteID);
   }
 });
 
