@@ -15,19 +15,19 @@
         <button onclick="nullCookie()" data-tooltip="Start a new site" class="tooltip-bottom">
             <i class="fas fa-sync"></i>
         </button>
-        <button onclick="nullCookie()" data-tooltip="Preferences" class="tooltip-bottom">
+        <button onclick="" data-tooltip="Preferences" class="tooltip-bottom">
             <i class="fas fa-cog"></i>
         </button>
     </div><br><br>
     <img src="img/title.png">
   <div id="sitelink" style="font-size:0.8em;margin-bottom:5px;border:1px solid blue; width:fit-content;margin-left:auto;margin-right:auto;padding:4px;border-radius:3px;"></div>
-  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
+  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;height:50vh;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
     <div class="fallback">
       <input name="dropfile" type="file" multiple />
     </div>
    </form>
-
-
+   <span style="font-size:0.8em">by </span>
+   <img src="img/brocorp.png" style="width:12vw;padding-top:4vh;">
   <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   <script>
 
@@ -38,6 +38,7 @@
     alert("Copied to clipboard: " + copyText.value);
   }
 
+  //if the site cookie exists, displays the current site URL.
   function updateSiteLink(){
     var link = document.getElementById('sitelink');
     console.log(getCookie("siteID"));
