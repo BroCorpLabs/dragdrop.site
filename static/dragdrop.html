@@ -8,14 +8,19 @@
     <meta name="author" content="BroCorp">
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     <link rel="stylesheet" href="https://unpkg.com/picnic">
-  
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   </head>
   <body style="text-align:center;margin:0px;padding-top:5vh;background-color:white;">
-  <img src="img/title.png">
-  <p style="color:black;font-style:light">
-    <h4>Publish websites by dragging and dropping them into your browser.</h4><br>
-  </p>
-
+    <div style="float:right;font-size:1em;margin-right:5vw;">
+        <button onclick="nullCookie()" data-tooltip="Start a new site" class="tooltip-bottom">
+            <i class="fas fa-sync"></i>
+        </button>
+        <button onclick="nullCookie()" data-tooltip="Preferences" class="tooltip-bottom">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div><br><br>
+    <img src="img/title.png">
+  <div id="sitelink" style="font-size:0.8em;margin-bottom:5px;border:1px solid blue; width:fit-content;margin-left:auto;margin-right:auto;padding:4px;border-radius:3px;"></div>
   <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
     <div class="fallback">
       <input name="dropfile" type="file" multiple />
@@ -25,16 +30,71 @@
 
   <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   <script>
+
+  function copyToClip(){
+    var copyText = document.getElementById("linkText");
+    copyText.select();
+    document.execCommand("copy");
+    alert("Copied to clipboard: " + copyText.value);
+  }
+
+  function updateSiteLink(){
+    var link = document.getElementById('sitelink');
+    console.log(getCookie("siteID"));
+    if(getCookie("siteID")!=""){
+      console.log(getCookie("siteID"))
+      link.innerHTML = "Your website is online at <textarea id='linkText' style='width:fit-content;height:2em;margin-bottom:-0.6em;'>"+getCookie("siteID")+".dragdrop.site</textarea><button class='label' onclick='copyToClip()'><i style='font-size:2em' class='fas fa-clipboard'></i></button>"
+    }else{
+      link.innerHTML = "Upload files to create a new website :)"
+    }
+  }
+  updateSiteLink();
+  
+  function delete_cookie( name ) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+  function nullCookie(){
+    delete_cookie("siteID")
+    document.location.reload(false)
+  }
+
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+  }
+  
+    // document.cookie="data=false"
   Dropzone.options.dropfile = {
     paramName: "dropfile", // The name that will be used to transfer the file
     maxFilesize: 2, // MB
+    withCredentials: true,
+    dictDefaultMessage: "Drop files here or click to upload.",
     accept: function(file, done) {
       if (file.name == "justinbieber.jpg") {
         done("Psst. we only support HTML, CSS and Javascript. :(");
       }
-      else { done(); }
+      else { 
+        document.getElementById('dropfile').setAttribute("style","background-image:url();box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;")
+        done(); }
+    },
+    success: function(file, res){
+      //the response here sets a cookie with siteID if its a new site
+      updateSiteLink();
+      console.log(res)
     }
   };
+
   </script>
   </body>
 </html>

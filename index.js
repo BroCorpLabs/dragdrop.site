@@ -1,4 +1,5 @@
 var express = require('express')
+var cookieParser = require('cookie-parser');
 
 //for file upload/storage
 var multer  = require('multer')
@@ -14,15 +15,38 @@ const upload = multer({storage: storage})
 
 
 var app = express()
-app.use(express.static('static'))
+app.use(cookieParser());
+app.use(express.static('static/'));
+app.use(express.static('userSites/'));
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/static/dragdrop.html");
 })
 
+function makeid(len) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < len; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
+function newSite(){
+  var siteID = makeid(5)
+  //create a new directory with siteID
+  //create a new nginx file
+  return siteID;
+}
+
 app.post( '/upload', upload.single('dropfile'), function( req, res, next ) {
   // Metadata about the uploaded file can now be found in req.file
-  console.log(req);
-  return res.status( 200 ).send('success');
+  console.log(req.cookies.siteID);
+  if(req.cookies.siteID == undefined){
+    console.log("creating new site")
+    return res.status( 201 ).cookie('siteID', newSite()).send('successfully created new site');
+  } else {
+    return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
+  }
 });
 
 var port=3000;

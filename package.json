@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/BroCorpLabs/dragdrop.site#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.4",
     "multer": "^1.4.1"
   }
