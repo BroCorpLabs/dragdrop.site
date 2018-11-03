@@ -1,6 +1,7 @@
 var express = require('express')
 var cookieParser = require('cookie-parser');
 const fs = require('fs');
+const webdir = __dirname + "/sites/"; //migrate to /var/www/sites
 
 //for file upload/storage
 var multer  = require('multer')
@@ -32,11 +33,22 @@ function makeid(len) {
   return text;
 }
 
+function makeRedirect(from, to, siteID){
+  htmlRedirect = '<html><head><meta property="og:url" content="'+ to +'" />'+
+        '<meta property="og:type" content="article" />'+
+        '<meta property="og:title" content="Drag-Dropped Site" />'+
+        '<meta property="og:description" content="Easy static hosting at Dragdrop.site" />'+
+        '<meta HTTP-EQUIV="REFRESH" content="0; url='+ to +'"></head></html>"""'
+
+  fs.writeFile(__dirname + "/sites/"+siteID+"/"+from, htmlRedirect, { flag: 'w' }, function (err) {
+    if (err) throw err;
+    console.log('Redirect File is created successfully.');
+  }); 
+}
+
 function newSite(filename){
   var siteID = makeid(5)
-  var directory = __dirname + "/sites/"+siteID;
-  console.log("Making new site at "+directory);
-  fs.mkdir(directory, (err) => {
+  fs.mkdir(webdir+siteID, (err) => {
     if (err) throw err;
   });
   console.log("created directory")
@@ -44,11 +56,14 @@ function newSite(filename){
   //create a new nginx file in /etc/nginx/sites-available/
   //create a symlink in /etc/nginx/sites-enabled
   moveToUserDir(filename, siteID);
+  if(filename !== "index.html"){ //if initial file is not index.html, create a redirect to it
+    makeRedirect("index.html", filename, siteID)
+  }
   return siteID;
 }
 
 function moveToUserDir(filename, siteID){
-  fs.rename(__dirname + '/uploads/' + filename, __dirname + "/sites/"+siteID + '/' + filename, function(err) {
+  fs.rename(__dirname + '/uploads/' + filename, webdir+siteID + '/' + filename, function(err) {
     if (err) throw err
     console.log('Successfully moved '+ filename + ' for ' +siteID);
   })
