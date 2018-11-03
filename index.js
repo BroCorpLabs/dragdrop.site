@@ -1,11 +1,12 @@
 var express = require('express')
 var cookieParser = require('cookie-parser');
+const fs = require('fs');
 
 //for file upload/storage
 var multer  = require('multer')
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'userSites/')
+    cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname)
@@ -17,7 +18,7 @@ const upload = multer({storage: storage})
 var app = express()
 app.use(cookieParser());
 app.use(express.static('static/'));
-app.use(express.static('userSites/'));
+app.use(express.static('sites/'));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + "/static/dragdrop.html");
@@ -33,6 +34,12 @@ function makeid(len) {
 
 function newSite(filename){
   var siteID = makeid(5)
+  var directory = __dirname + "/sites/"+siteID;
+  console.log("Making new site at "+directory);
+  fs.mkdir(directory, (err) => {
+    if (err) throw err;
+  });
+  console.log("created directory")
   //create a new directory with siteID in /var/www/userSites/
   //create a new nginx file in /etc/nginx/sites-available/
   //create a symlink in /etc/nginx/sites-enabled
@@ -41,6 +48,10 @@ function newSite(filename){
 }
 
 function moveToUserDir(filename, siteID){
+  fs.rename(__dirname + '/uploads/' + filename, __dirname + "/sites/"+siteID + '/' + filename, function(err) {
+    if (err) throw err
+    console.log('Successfully moved '+ filename + ' for ' +siteID);
+  })
   //move file from uploads dir to user dir
     //if file exists, rename existing and add new
 }
@@ -52,8 +63,8 @@ app.post( '/upload', upload.single('dropfile'), function( req, res, next ) {
     console.log("creating new site")
     return res.status( 201 ).cookie('siteID', newSite(req.file.originalname)).send('successfully created new site');
   } else {
-    return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
     moveToUserDir(req.file.originalname, req.cookies.siteID);
+    return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
   }
 });
 

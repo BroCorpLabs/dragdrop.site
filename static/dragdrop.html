@@ -44,7 +44,7 @@
     console.log(getCookie("siteID"));
     if(getCookie("siteID")!=""){
       console.log(getCookie("siteID"))
-      link.innerHTML = "Your website is online at <textarea id='linkText' style='width:fit-content;height:2em;margin-bottom:-0.6em;'>"+getCookie("siteID")+".dragdrop.site</textarea><button class='label' onclick='copyToClip()'><i style='font-size:2em' class='fas fa-clipboard'></i></button>"
+      link.innerHTML = "Your website is online at <textarea id='linkText' style='width:fit-content;height:2em;margin-bottom:-0.6em;'>dragdrop.site/"+getCookie("siteID")+"/</textarea><button class='label' onclick='copyToClip()'><i style='font-size:2em' class='fas fa-clipboard'></i></button>"
     }else{
       link.innerHTML = "Upload files to create a new website :)"
     }
