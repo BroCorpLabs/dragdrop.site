@@ -62,6 +62,10 @@ function newSite(filename){
   return siteID;
 }
 
+function getSiteFiles(siteID){
+
+}
+
 function moveToUserDir(filename, siteID){
   fs.rename(__dirname + '/uploads/' + filename, webdir+siteID + '/' + filename, function(err) {
     if (err) throw err
@@ -81,6 +85,23 @@ app.post( '/upload', upload.single('dropfile'), function( req, res, next ) {
     moveToUserDir(req.file.originalname, req.cookies.siteID);
     return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
   }
+});
+
+function getFileSize(filepath){
+  const stats = fs.statSync(filepath)
+  return stats.size;
+}
+
+app.get('/uploads', function(req, res){
+  if(req.cookies.siteID != undefined){
+    siteid = req.cookies.siteID;
+    fs.readdir(webdir + siteid, (err, files) => {
+      var filesArray = files.map(function (file) {
+          return {'name':file, 'size':getFileSize(webdir+siteid+"/"+file)};
+      });
+      res.send(JSON.stringify(filesArray));
+    })
+  } else {return null}
 });
 
 var port=3000;
