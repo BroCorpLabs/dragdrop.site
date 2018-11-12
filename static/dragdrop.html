@@ -5,23 +5,51 @@
     <title>Drag-Drop Site: Fastest Static Site Hosting</title>
     <meta name="description" content="Free, fast simple hosting for websites by BroCorp.">
     <meta name="keywords" content="Static Site, Hosting, Server, Without Server, Serverless">
-    <meta name="author" content="BroCorp">
+    <meta name="author" content="BroCorp.in">
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     <link rel="stylesheet" href="https://unpkg.com/picnic">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <style>
+    #logo {
+        text-align:left;
+        padding-left:2em;
+    }
+    #toolpanel{
+      text-align:right;
+    }
+    
+    @media only screen and (max-width: 900px) {
+      #logo {
+        text-align:center;
+        padding-right:2em;
+    }
+      #toolpanel {
+          text-align:center;
+      }
+    }
+    </style>
   </head>
   <body style="text-align:center;margin:0px;padding-top:5vh;background-color:white;">
-    <div style="float:right;font-size:1em;margin-right:5vw;">
+
+    
+    <div class="flex one two-900">
+      <div id="logo"><img src="img/title.png" style="height:2.2em;">
+      </div>
+      
+      <div id="toolpanel" style="font-size:1em;padding-right:1em">
+        <div id="sitelink" style="display:inline;font-size:1em;border:1px solid blue;padding:4px;border-radius:3px;"></div>
         <button onclick="nullCookie()" data-tooltip="Start a new site" class="tooltip-bottom pseudo">
             <i class="fas fa-sync"></i>
         </button>
         <button onclick="" data-tooltip="Preferences" class="tooltip-bottom pseudo">
             <i class="fas fa-cog"></i>
         </button>
-    </div><br><br>
-    <img src="img/title.png">
-  <div id="sitelink" style="font-size:0.8em;margin-bottom:5px;border:1px solid blue; width:fit-content;margin-left:auto;margin-right:auto;padding:4px;border-radius:3px;"></div>
-  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;height:50vh;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
+      </div>
+    </div>
+    <br /> <br /><br /><br />
+
+
+  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:80vw;height:50vh;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
     <div class="fallback">
       <input name="dropfile" type="file" multiple />
     </div>
@@ -63,7 +91,7 @@
     var link = document.getElementById('sitelink');
     if(getCookie("siteID")!=""){
       console.log(getCookie("siteID"))
-      link.innerHTML = "Your website is online at <textarea id='linkText' style='width:fit-content;height:2em;margin-bottom:-0.6em;'>dragdrop.site/"+getCookie("siteID")+"/</textarea><button class='label' onclick='copyToClip()'><i style='font-size:2em' class='fas fa-clipboard'></i></button>"
+      link.innerHTML = "Your website is online at <textarea id='linkText' style='width:fit-content;height:1.6em;font-size:0.8em;padding-top:0px;margin-bottom:-0.5em'>dragdrop.site/"+getCookie("siteID")+"/</textarea><button class='label' style='height:2.2em;' onclick='copyToClip()'><i style='font-size:1.5em' class='fas fa-clipboard'></i></button>"
     }else{
       link.innerHTML = "Upload files to create a new website :)"
     }
