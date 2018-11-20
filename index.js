@@ -50,13 +50,14 @@ function makeNginxConfig(siteID){
   configText = `server {
     listen 80;
     listen [::]:80;
-    server_name '+siteID+'.dragdrop.site;'+ //site.dragdrop.si
+    server_name `+siteID+`.dragdrop.site; 
     root /var/www/userSites/'+siteID+'/;
     index index.html;
     location / {
             try_files $uri $uri/ =404;
     }
-    }`
+    }
+    `
     //create config file for nginx
     fs.writeFile("/etc/nginx/sites-available/"+siteID, configText, { flag: 'w' }, function (err) {
       if (err) throw err;
