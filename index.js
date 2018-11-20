@@ -1,7 +1,7 @@
 var express = require('express')
 var cookieParser = require('cookie-parser');
 const fs = require('fs');
-const webdir = __dirname + "/sites/"; //migrate to /var/www/sites
+const webdir = "/var/www/userSites/"//__dirname + "/sites/"; //migrate to /var/www/sites
 
 //for file upload/storage
 var multer  = require('multer')
@@ -40,23 +40,50 @@ function makeRedirect(from, to, siteID){
         '<meta property="og:description" content="Easy static hosting at Dragdrop.site" />'+
         '<meta HTTP-EQUIV="REFRESH" content="0; url='+ to +'"></head></html>"""'
 
-  fs.writeFile(__dirname + "/sites/"+siteID+"/"+from, htmlRedirect, { flag: 'w' }, function (err) {
+  fs.writeFile(webdir+"/"+siteID+"/"+from, htmlRedirect, { flag: 'w' }, function (err) {
     if (err) throw err;
     console.log('Redirect File is created successfully.');
   }); 
 }
 
+function makeNginxConfig(siteID){
+  configText = 'server {'+
+    'listen 80;'+
+    'listen [::]:80;'+
+    'server_name '+siteID+'.dragdrop.site;'+ //site.dragdrop.site
+    'root /var/www/userSites/'+siteID+'/;'+
+    'index index.html;'+
+    'location / {'+
+    '        try_files $uri $uri/ =404;'+
+    '}'+
+    '}'
+    //create config file for nginx
+    fs.writeFile("/etc/nginx/sites-available/"+siteID, configText, { flag: 'w' }, function (err) {
+      if (err) throw err;
+      console.log('Nginx File is created successfully.');
+      //create symlink in sites-enabled
+      fs.symlink("/etc/nginx/sites-available/"+siteID, "/etc/nginx/sites-enabled/"+siteID, function(){
+        //reload nginx
+      const
+        { spawnSync } = require( 'child_process' ),
+        ls = spawnSync( 'nginx', [ '-s', 'reload' ] );
+        console.log(ls)
+        console.log( `Nginx restart: ${ls.stdout.toString()}` );
+      })
+    }); 
+    console.log("done with nginx");
+}
+
 function newSite(filename){
   var siteID = makeid(5)
+  //create a new directory with siteID in /var/www/userSites/
   fs.mkdir(webdir+siteID, (err) => {
     if (err) throw err;
   });
-  console.log("created directory")
-  //create a new directory with siteID in /var/www/userSites/
-  //create a new nginx file in /etc/nginx/sites-available/
-  //create a symlink in /etc/nginx/sites-enabled
+  makeNginxConfig(siteID);
   moveToUserDir(filename, siteID);
-  if(filename !== "index.html"){ //if initial file is not index.html, create a redirect to it
+  if(filename !== "index.html" && !fs.existsSync(webdir+siteID+"/index.html")){ //if initial file is not index.html, create a redirect to it
+    console.log("non index.html starter, created")
     makeRedirect("index.html", filename, siteID)
   }
   return siteID;
