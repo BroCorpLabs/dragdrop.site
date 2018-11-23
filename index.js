@@ -68,21 +68,21 @@ function makeNginxConfig(siteID){
       const
         { spawnSync } = require( 'child_process' ),
         ls = spawnSync( 'nginx', [ '-s', 'reload' ] );
-        console.log(ls)
-        console.log( `Nginx restart: ${ls.stdout.toString()}` );
+        //console.log(ls)
+        //console.log( `Nginx restart: ${ls.stdout.toString()}` );
       })
     }); 
     console.log("done with nginx");
 }
 
-function newSite(filename){
+function newSite(filename, fullpath){
   var siteID = makeid(5)
   //create a new directory with siteID in /var/www/userSites/
   fs.mkdir(webdir+siteID, (err) => {
     if (err) throw err;
   });
   makeNginxConfig(siteID);
-  moveToUserDir(filename, siteID);
+  moveToUserDir(filename, fullpath, siteID);
   if(filename !== "index.html" && !fs.existsSync(webdir+siteID+"/index.html")){ //if initial file is not index.html, create a redirect to it
     console.log("non index.html starter, created")
     makeRedirect("index.html", filename, siteID)
@@ -94,10 +94,24 @@ function getSiteFiles(siteID){
 
 }
 
-function moveToUserDir(filename, siteID){
-  fs.rename(__dirname + '/uploads/' + filename, webdir+siteID + '/' + filename, function(err) {
+function moveToUserDir(filename, fullpath, siteID){
+
+  //file directory validation
+  if (null != fullpath)
+    {
+        endIndex = fullpath.lastIndexOf("/");
+        if(endIndex == -1){
+          fullpath = '';
+        }else if (endIndex != -1){
+            fullpath = fullpath.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+            if(fullpath.includes(".."))fullpath='';
+        }
+    }  
+  !fs.existsSync(webdir+siteID + '/' + fullpath) && fs.mkdirSync(webdir+siteID + '/' + fullpath);
+
+  fs.rename(__dirname + '/uploads/' + filename, webdir+siteID + '/' + fullpath + '/' + filename, function(err) {
     if (err) throw err
-    console.log('Successfully moved '+ filename + ' for ' +siteID);
+    console.log('Successfully moved '+ fullpath + '/' + filename+ ' for ' +siteID);
   })
   //move file from uploads dir to user dir
     //if file exists, rename existing and add new
@@ -108,9 +122,9 @@ app.post( '/upload', upload.single('dropfile'), function( req, res, next ) {
   console.log(req.cookies.siteID + " uploaded "+ req.file.originalname);
   if(req.cookies.siteID == undefined){
     console.log("creating new site")
-    return res.status( 201 ).cookie('siteID', newSite(req.file.originalname)).send('successfully created new site');
+    return res.status( 201 ).cookie('siteID', newSite(req.file.originalname, req.body.path)).send('successfully created new site');
   } else {
-    moveToUserDir(req.file.originalname, req.cookies.siteID);
+    moveToUserDir(req.file.originalname, req.body.path, req.cookies.siteID);
     return res.status( 200 ).send('successfully added file to site: '+req.cookies.siteID);
   }
 });

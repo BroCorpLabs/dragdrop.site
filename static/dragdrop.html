@@ -98,6 +98,7 @@
     <div class="fallback">
       <input name="dropfile" type="file" multiple />
     </div>
+    <span id="tmp-path"></span>
    </form>
 
    <div id="template-preview">
@@ -188,6 +189,14 @@
                       });
                   });
                 }
+                this.on("sending", function(file) {
+                        var name = file.fullPath;
+                        if (typeof (file.fullPath) === "undefined") {
+                            name = file.name;
+                        }
+                        console.log("uploading file: "+name)
+                $("#tmp-path").html('<input type="hidden" name="path" value="'+name+'" />')
+                });
     },
     maxFilesize: 2, // MB
     withCredentials: true,
