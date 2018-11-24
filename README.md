@@ -5,8 +5,8 @@ Dragdrop aims to support website stacks ranging from simple html to large single
 
 Dragdrop makes the process of hosting your content at a unique address on the web as simple as possible. 
 
-##Environment Setup
+## Environment Setup
 Prerequisites:
-NodeJS
-nginx server
-Linux
+1. NodeJS
+2. nginx server
+3. Linux
