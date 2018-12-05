@@ -51,7 +51,7 @@
     #toolpanel{
       text-align:right;
     }
-    
+
     @media only screen and (max-width: 1100px) {
       #logo {
         text-align:center;
@@ -65,27 +65,27 @@
   </head>
   <body style="text-align:center;margin:0px;padding-top:5vh;background-color:white;">
 
-    
+
     <div class="flex one two-1100">
       <div id="logo"><img src="img/title.png" style="height:2.2em;">
       </div>
-      
+
       <div id="toolpanel" style="font-size:1em;padding-right:1em">
         <div id="sitelink" style="display:inline;font-size:1em;border:1px solid blue;padding:4px;border-radius:3px;"></div>
         <div class="dropdown">
             <span>&nbsp;&nbsp;<i class="fas fa-cog"></i>&nbsp;&nbsp;</span>
             <div class="dropdown-content">
                 <h4>Quick Start Guide</h4>
-                Upload any file and dragdrop.site will create a link for you to share with the world. 
+                Upload any file and dragdrop.site will create a link for you to share with the world.
                 <br><br>
                 <h5>Create your own website!</h5>
                 Simply upload your html, css, javascript, and any other static files.
                 <hr />
                 <center>
                 <button onclick="nullCookie()" class="pseudo">
-                    Start a new site &nbsp; &nbsp; <i class="fas fa-sync"></i> 
-                    
-                </button> 
+                    Start a new site &nbsp; &nbsp; <i class="fas fa-sync"></i>
+
+                </button>
                 <br><span style="font-size:0.8em"><i>Dragdrop.site is currently in beta.</i></span></center>
             </div>
           </div>
@@ -142,7 +142,7 @@
     }
   }
   updateSiteLink();
-  
+
   function delete_cookie( name ) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   }
@@ -166,10 +166,10 @@
     }
     return "";
   }
-  
+
     // document.cookie="data=false"
   Dropzone.options.dropfile = {
-    paramName: "dropfile", // The name that will be used to transfer the file
+    paramName: "dropfile",// The name that will be used to transfer the file
     init: function () {
                 thisDropzone = this;
                 if(getCookie("siteID")!=""){ //to fetch existing files and display them
@@ -197,15 +197,25 @@
                         console.log("uploading file: "+name)
                 $("#tmp-path").html('<input type="hidden" name="path" value="'+name+'" />')
                 });
+                this.on("removedfile", function(file) { //added toremove file. routes to php
+                        alert("Delete this file?");
+                        $.ajax({
+                          url: '/func/delete.php?filetodelete='+file.name,
+                          type: "POST",
+                          data: { 'filetodelete': file.name}
+                        });
+                });
     },
     maxFilesize: 2, // MB
     withCredentials: true,
+    addRemoveLinks: true, //remove file
+    dictRemoveFile: "Remove",
     dictDefaultMessage: "Drop files here or click to upload.",
     accept: function(file, done) {
       if (file.name == "justinbieber.jpg") {
         done("Psst. we only support HTML, CSS and Javascript. :(");
       }
-      else { 
+      else {
         document.getElementById('dropfile').setAttribute("style","background-image:url();box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;")
         done(); }
     },
