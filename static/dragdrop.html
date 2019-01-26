@@ -20,81 +20,51 @@
     <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
     <link rel="stylesheet" href="https://unpkg.com/picnic">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-    <style>
-    .dropdown {
-    position: relative;
-    display: inline-block;
-    }
-
-    .dropdown-content {
-        font-size:0.9em;
-        text-align:left;
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 300px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        border-radius:0 0 0 5px;
-        padding: 12px 16px;
-        z-index: 1;
-        right:0;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    #logo {
-        text-align:left;
-        padding-left:2em;
-    }
-    #toolpanel{
-      text-align:right;
-    }
-    
-    @media only screen and (max-width: 1100px) {
-      #logo {
-        text-align:center;
-        padding-right:2em;
-    }
-      #toolpanel {
-          text-align:center;
-      }
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body style="text-align:center;margin:0px;padding-top:5vh;background-color:white;">
 
-    
-    <div class="flex one two-1100">
-      <div id="logo"><img src="img/title.png" style="height:2.2em;">
-      </div>
-      
-      <div id="toolpanel" style="font-size:1em;padding-right:1em">
-        <div id="sitelink" style="display:inline;font-size:1em;border:1px solid blue;padding:4px;border-radius:3px;"></div>
-        <div class="dropdown">
-            <span>&nbsp;&nbsp;<i class="fas fa-cog"></i>&nbsp;&nbsp;</span>
-            <div class="dropdown-content">
-                <h4>Quick Start Guide</h4>
-                Upload any file and dragdrop.site will create a link for you to share with the world. 
-                <br><br>
-                <h5>Create your own website!</h5>
-                Simply upload your html, css, javascript, and any other static files.
-                <hr />
-                <center>
-                <button onclick="nullCookie()" class="pseudo">
-                    Start a new site &nbsp; &nbsp; <i class="fas fa-sync"></i> 
-                    
-                </button> 
-                <br><span style="font-size:0.8em"><i>Dragdrop.site is currently in beta.</i></span></center>
-            </div>
+      <nav>
+          <a href="/" class="brand">
+            <img class="logo" src="img/title.png" style="height:2.2em;">
+          </a>
+        
+          <!-- responsive-->
+          <input id="bmenub" type="checkbox" class="show">
+          <label for="bmenub" class="burger pseudo button">Menu</label>
+        
+          <div class="menu">
+              <div id="toolpanel" style="font-size:1em;padding-right:1em">
+                  <div id="sitelink" style="display:inline;font-size:1em;border:1px solid blue;padding:4px;border-radius:3px;"></div>
+                  <div class="dropdown">
+                      <span>&nbsp;&nbsp;<i class="fas fa-cog"></i>&nbsp;&nbsp;</span>
+                      <div class="dropdown-content">
+                          <h4>Quick Start Guide</h4>
+                          Upload any file and dragdrop.site will create a link for you to share with the world. 
+                          <br><br>
+                          <h5>Create your own website!</h5>
+                          Simply upload your html, css, javascript, and any other static files.
+                          <hr />
+                          <center>
+                          <button onclick="nullCookie()" class="pseudo">
+                              Start a new site &nbsp; &nbsp; <i class="fas fa-sync"></i> 
+                              
+                          </button> 
+                          <br><span style="font-size:0.8em"><i>Dragdrop.site is currently in beta.</i></span></center>
+                      </div>
+                    </div>
+                </div>
           </div>
-      </div>
-    </div>
+        </nav>
+    
+        <br /> <br /><br /><br />
+
+
+    <!-- SITE CONTENT-->
     <br /> <br /><br /><br />
 
-
-  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:80vw;height:50vh;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
+<div style="height:65vh;">
+  <form action="/upload" id="dropfile" class="dropzone" style="box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:80vw;background-image: url(img/dragdrop-header.gif);background-size: 80%;background-repeat: no-repeat;background-position: center">
     <div class="fallback">
       <input name="dropfile" type="file" multiple />
     </div>
@@ -113,10 +83,20 @@
             <div class="dz-error-message"><span data-dz-errormessage></span></div>
     </div>
     </div>
+  </div>
+<!-- END OF SITE CONTENT -->
 
+<footer style="border-top:1px solid black;">
+    <div style="float:left;">&nbsp;&nbsp;
+      <a href="about.html" style="color:black">About</a>&nbsp;&nbsp;|
+      <a href="business.html" style="color:black">For Business</a>&nbsp;|
+      <a href="faq.html" style="color:black">FAQ</a>&nbsp;|
+      <a href="terms.html" style="color:black">Terms</a>
+    </div>
+    <div style="float:right"><span style="font-size:0.8em">by </span><a href="https://brocorp.in/"><img src="img/brocorp.png" style="width:130px;padding-right:5px;"></a>
+    </div>
+ </footer>
 
-   <span style="font-size:0.8em">by </span>
-   <img src="img/brocorp.png" style="width:12vw;padding-top:4vh;">
   <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
   <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -166,56 +146,7 @@
     }
     return "";
   }
-  
-    // document.cookie="data=false"
-  Dropzone.options.dropfile = {
-    paramName: "dropfile", // The name that will be used to transfer the file
-    init: function () {
-                thisDropzone = this;
-                if(getCookie("siteID")!=""){ //to fetch existing files and display them
-                  console.log("welcome back " + getCookie("siteID"));
-                  $.get('/uploads', function (data) {
-                      if (data == null) {
-                          return;
-                      }
-                      document.getElementById('dropfile').setAttribute("style","background-image:url();box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;")
-                      data = JSON.parse(data);
-                      $.each(data, function (key, value) {
-                          var mockFile = { name: value.name, size: value.size };
-                          thisDropzone.emit("addedfile", mockFile);
-                          //thisDropzone.options.thumbnail.call(thisDropzone, mockFile, '/public/uploads/thumbnail_' + value.name);
-                          // Make sure that there is no progress bar, etc...
-                          thisDropzone.emit("complete", mockFile);
-                      });
-                  });
-                }
-                this.on("sending", function(file) {
-                        var name = file.fullPath;
-                        if (typeof (file.fullPath) === "undefined") {
-                            name = file.name;
-                        }
-                        console.log("uploading file: "+name)
-                $("#tmp-path").html('<input type="hidden" name="path" value="'+name+'" />')
-                });
-    },
-    maxFilesize: 2, // MB
-    withCredentials: true,
-    dictDefaultMessage: "Drop files here or click to upload.",
-    accept: function(file, done) {
-      if (file.name == "justinbieber.jpg") {
-        done("Psst. we only support HTML, CSS and Javascript. :(");
-      }
-      else { 
-        document.getElementById('dropfile').setAttribute("style","background-image:url();box-shadow:15px black;border-radius:10px;margin-left:auto;margin-right:auto;width:40vw;")
-        done(); }
-    },
-    success: function(file, res){
-      //the response here sets a cookie with siteID if its a new site
-      updateSiteLink();
-      console.log(res)
-    }
-  };
-
   </script>
+  <script src="dropBox.js"></script>
   </body>
 </html>
